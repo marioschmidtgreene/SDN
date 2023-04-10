@@ -108,7 +108,8 @@ function GivePermissionToNetworkService($targetCert)
     $targetCertPrivKey = $targetCert.PrivateKey 
     $privKeyCertFile = Get-Item -path "$ENV:ProgramData\Microsoft\Crypto\RSA\MachineKeys\*"  | where {$_.Name -eq $targetCertPrivKey.CspKeyContainerInfo.UniqueKeyContainerName} 
     $privKeyAcl = (Get-Item -Path $privKeyCertFile.FullName).GetAccessControl("Access") 
-    $permission = "NT AUTHORITY\NETWORK SERVICE","Read","Allow" 
+    $networkServiceAccountName = [string] (New-Object System.Security.Principal.SecurityIdentifier("S-1-5-20")).Translate([System.Security.Principal.NTAccount])
+    $permission = $networkServiceAccountName,"Read","Allow"
     $accessRule = new-object System.Security.AccessControl.FileSystemAccessRule $permission 
     $privKeyAcl.AddAccessRule($accessRule) 
     Set-Acl $privKeyCertFile.FullName $privKeyAcl
