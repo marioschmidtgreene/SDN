@@ -279,8 +279,9 @@ General notes
                 $targetCertPrivKey = $Cert.PrivateKey 
                 $privKeyCertFile = Get-Item -path "$ENV:ProgramData\Microsoft\Crypto\RSA\MachineKeys\*"  | where-object {$_.Name -eq $targetCertPrivKey.CspKeyContainerInfo.UniqueKeyContainerName} 
                 $privKeyAcl = Get-Acl $privKeyCertFile
-                $permission = "NT AUTHORITY\NETWORK SERVICE","Read","Allow" 
-                $accessRule = new-object System.Security.AccessControl.FileSystemAccessRule $permission 
+                $networkServiceAccountName = [string] (New-Object System.Security.Principal.SecurityIdentifier("S-1-5-20")).Translate([System.Security.Principal.NTAccount])
+                $permission = $networkServiceAccountName,"Read","Allow"
+                $accessRule = new-object System.Security.AccessControl.FileSystemAccessRule $permission
                 $privKeyAcl.AddAccessRule($accessRule) 
                 Set-Acl $privKeyCertFile.FullName $privKeyAcl
 
@@ -344,8 +345,9 @@ General notes
                 $targetCertPrivKey = $Cert.PrivateKey 
                 $privKeyCertFile = Get-Item -path "$ENV:ProgramData\Microsoft\Crypto\RSA\MachineKeys\*"  | where-object {$_.Name -eq $targetCertPrivKey.CspKeyContainerInfo.UniqueKeyContainerName} 
                 $privKeyAcl = Get-Acl $privKeyCertFile
-                $permission = "NT AUTHORITY\NETWORK SERVICE","Read","Allow" 
-                $accessRule = new-object System.Security.AccessControl.FileSystemAccessRule $permission 
+                $networkServiceAccountName = [string] (New-Object System.Security.Principal.SecurityIdentifier("S-1-5-20")).Translate([System.Security.Principal.NTAccount])
+                $permission = $networkServiceAccountName,"Read","Allow"
+                $accessRule = new-object System.Security.AccessControl.FileSystemAccessRule $permission
                 $privKeyAcl.AddAccessRule($accessRule) | out-null
                 Set-Acl $privKeyCertFile.FullName $privKeyAcl | out-null
 
@@ -1239,7 +1241,8 @@ Function Add-SDNExpressHost {
             $targetCertPrivKey = $Cert.PrivateKey 
             $privKeyCertFile = Get-Item -path "$ENV:ProgramData\Microsoft\Crypto\RSA\MachineKeys\*"  | where-object {$_.Name -eq $targetCertPrivKey.CspKeyContainerInfo.UniqueKeyContainerName} 
             $privKeyAcl = Get-Acl $privKeyCertFile
-            $permission = "NT AUTHORITY\NETWORK SERVICE","Read","Allow" 
+            $networkServiceAccountName = [string] (New-Object System.Security.Principal.SecurityIdentifier("S-1-5-20")).Translate([System.Security.Principal.NTAccount])
+            $permission = $networkServiceAccountName,"Read","Allow"
             $accessRule = new-object System.Security.AccessControl.FileSystemAccessRule $permission 
             $privKeyAcl.AddAccessRule($accessRule) | out-null 
             Set-Acl $privKeyCertFile.FullName $privKeyAcl | out-null
@@ -1898,7 +1901,8 @@ Function Add-SDNExpressMux {
         $targetCertPrivKey = $Cert.PrivateKey 
         $privKeyCertFile = Get-Item -path "$ENV:ProgramData\Microsoft\Crypto\RSA\MachineKeys\*"  | where-object {$_.Name -eq $targetCertPrivKey.CspKeyContainerInfo.UniqueKeyContainerName} 
         $privKeyAcl = Get-Acl $privKeyCertFile
-        $permission = "NT AUTHORITY\NETWORK SERVICE","Read","Allow" 
+        $networkServiceAccountName = [string] (New-Object System.Security.Principal.SecurityIdentifier("S-1-5-20")).Translate([System.Security.Principal.NTAccount])
+        $permission = $networkServiceAccountName,"Read","Allow"
         $accessRule = new-object System.Security.AccessControl.FileSystemAccessRule $permission 
         $privKeyAcl.AddAccessRule($accessRule) 
         Set-Acl $privKeyCertFile.FullName $privKeyAcl
