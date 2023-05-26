@@ -3179,7 +3179,7 @@ $DNSInterfaces
 
         $Edition = get-windowsedition -path $MountPath
 
-        if (!(@("ServerDatacenterCor", "ServerDatacenter", "ServerAzureStackHCICor") -contains $Edition.Edition)) {
+        if (!(@("ServerDatacenterCor", "ServerDatacenter", "ServerAzureStackHCICor", "ServerDatacenterEvalCor", "ServerDatacenterEval") -contains $Edition.Edition)) {
             write-logerror -OperationId $operationId -Source $MyInvocation.MyCommand.Name -ErrorCode $Errors["WINDOWSEDITION"].Code -LogMessage $Errors["WINDOWSEDITION"].Message   #No errormessage because SDN Express generates error
             throw $Errors["WINDOWSEDITION"].Message        
         }
